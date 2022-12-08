@@ -16,45 +16,42 @@ import java.util.logging.Logger;
  * @author Ni
  */
 public class HostHandler {
-
+    private List<Host> listHost;
    private Host host;
 
-    public HostHandler(Host h) {
+    public HostHandler(Host h, List<Host> listHost) {
         this.host =h ;
+        this.listHost = listHost;
     }
     
    
-    public void run() {
+    public boolean run() {
        try {
-           
            this.host.connect();
-           System.out.println("mandeha ny connect");
-           this.host.readMessage();
-           //this.host.sendMessage();
-           System.out.println("mandeha ny read");
+           this.host.readMessage(this.listHost);
            
-        System.out.println(this.host.client);
-           
-           
-       } catch (IOException ex) {
-           try {
-               System.out.println("misy blem de midina ato");
+           return true;
+       } catch (Exception e) {
+           e.printStackTrace();
+           /*try {
                this.host.disconnect();
            } catch (IOException ex1) {
                Logger.getLogger(HostHandler.class.getName()).log(Level.SEVERE, null, ex1);
            }finally{
             System.out.println("hote deconnecter");
-            }
+            }*/
            
        }
+       return false;
     }
-
+    
+    /*
     public Host getHost() {
         return host;
     }
 
     public void setHost(Host host) {
         this.host = host;
-    }
+    }*/
     
 }

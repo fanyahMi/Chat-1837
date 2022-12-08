@@ -4,25 +4,26 @@
  */
 package link;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import entity.User;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 
 /**
  *
  * @author Ni
  */
 public class Host {
-    private Socket socket;
-    private BufferedReader bufferedReader;
+    /*private Socket socket;
+    private DataInputStream bufferedReader;
     private BufferedWriter bufferedWriter;
-    public String client;
+    private String client;
     
     public Host(){}
 
@@ -32,11 +33,7 @@ public class Host {
     
     public void connect() throws IOException{
         this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
-        System.out.println("misy soratana");
-        this.bufferedReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-         System.out.println("misy vakina");
-        //this.client=bufferedReader.readLine();
-        System.out.println(client);
+        this.bufferedReader =  new DataInputStream( new BufferedInputStream(socket.getInputStream()));
     }
     
     public void disconnect() throws IOException{
@@ -48,56 +45,154 @@ public class Host {
     }
     public void sendMessage() {
         try {
-            bufferedWriter.write(bufferedReader.readLine());
+            bufferedWriter.write(client);
             bufferedWriter.newLine();
             bufferedWriter.flush();
 
             Scanner scanner = new Scanner(System.in);
-            if (socket.isConnected()) {
+            while (socket.isConnected()) {
                 String mess = scanner.nextLine();
                 bufferedWriter.write(client + " : " + mess);
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
-            } else{
-                    System.out.println("tsy connecter");
-                    }
-        } catch (IOException e) {
+            }
+        } catch (Exception e) {
             try {
                 disconnect();
-            } catch (IOException err) {
+            } catch (Exception err) {
                 err.printStackTrace();
             }
-            e.printStackTrace();
         }
     }
     
-    public void readMessage() {
+*/
+    
+
+    
+    private User user = null;
+    private Socket socket;
+    private DataInputStream readerStream;
+    private DataOutputStream writerStream;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    public DataInputStream getReaderStream() {
+        return readerStream;
+    }
+
+    public void setReaderStream(DataInputStream readerStream) {
+        this.readerStream = readerStream;
+    }
+
+    public DataOutputStream getWriterStream() {
+        return writerStream;
+    }
+
+    public void setWriterStream(DataOutputStream writerStream) {
+        this.writerStream = writerStream;
+    }
+
+    public Host() {
+    }
+
+    public Host(Socket socket) {
+        this.socket = socket;
+    }
+    
+    public void connect() {
+        try {
+            this.readerStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+            this.writerStream = new DataOutputStream(socket.getOutputStream());
+            this.indentification();
+           
+        } catch (IOException e) {
+            e.printStackTrace();
+            try{
+                this.closeStream();
+            }catch(IOException ioe){
+                ioe.printStackTrace();
+            }
+            
+        }
+      
+    }
+    
+    private void closeStream() throws IOException{
+         this.readerStream.close();
+         this.writerStream.close();
+    }
+    
+    private void indentification(){
+       String line = "";
+       int cnx = 0;
+       while(this.user == null){
+           try {
+               line= this.readerStream.readUTF();
+               this.user= User.getUser(line);
+               cnx++;
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
+       }
+
+    }
+    
+    public void readMessage(List<Host> hosts) {
         new Thread(
                 new Runnable() {
                     @Override
                     public void run() {                        
-                        String MessGroup = null;
-                        if (socket.isConnected()) {
+                        String MessGroup;
+                        while (socket.isConnected()) {
                             try {
-                                MessGroup = bufferedReader.readLine();
-                            } catch (IOException ex) {
+                                String msg= user.getId()+" = "+readerStream.readUTF();
+                                System.out.println("------ " + user.getId());
+                                
+                                for(int i=0, taille= hosts.size(); i< taille ; i++ ){
+                                    if(!hosts.get(i).socket.isClosed() && !hosts.get(i).equals(this)){
+                                        hosts.get(i).sendMessage( msg); 
+                                    }
+                                }
+                            } catch (Exception e) {
+                                 e.printStackTrace();
+                             
+                             
+                                    
+                                
                             }
-                            System.out.println(MessGroup);
                         }
                     }
                 }).start();
     }
     
-    /*public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("entrer votre nom: ");
-        String nom = scanner.nextLine();
+    /*public void sendMessage(List<Host> hosts, String msg) {
         try {
-            Socket socket = new Socket("localhost", 1234);
-            Host p = new Host(socket);
+
             
-        } catch (Exception err) {
-            err.printStackTrace();
+                
+            
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }*/
+    
+    public void sendMessage(String msg) throws IOException{
+        System.out.println(msg);
+        this.writerStream.writeUTF(msg);
+        this.writerStream.flush();        
+    }
 }
