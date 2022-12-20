@@ -4,75 +4,48 @@
  */
 package client;
 
-import java.io.BufferedWriter;
+import aff.Fenetre;
+import detail.MessageUI;
+import detail.ReceveMess;
+import detail.SendMess;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author Ni
+ * @author rakot
  */
-public class Client {
+public class CLIENT {
+        public static String nom;
 
     /**
      * @param args the command line arguments
      */
-    
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         try {
-            Socket socket= new Socket("localhost",6666);
+            String ip = JOptionPane.showInputDialog(null, "Entrer l'ip du server");
+            nom = JOptionPane.showInputDialog(null, "Entrer votre nom");
+            // TODO code application logic here
+            Socket so = new Socket(ip, 5000);
+            DataOutputStream out = new DataOutputStream(so.getOutputStream());
+            DataInputStream input =new DataInputStream(so.getInputStream());
             
-            DataInputStream  input  = new DataInputStream(System.in);
-            DataOutputStream out    = new DataOutputStream(socket.getOutputStream());
-            DataInputStream inStream = new DataInputStream(socket.getInputStream());
+            out.writeUTF(nom);    
+            SendMess mess = new SendMess(out);
+            MessageUI messUI=new MessageUI();
+            new ReceveMess(input,messUI);
             
-           
+            Fenetre f = new Fenetre(out, input,messUI);
             
-            new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        String line="";
-                        while (!line.equals("Over")){
-                                try {
-                                    line=input.readLine();
-                                    out.writeUTF(line);
-                                } catch (Exception e) {
-                                     e.printStackTrace();
-                                }
-
-                            }
-                    }
-                }
-            ).start();
-            new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        String line="";
-                       
-                        while (!line.equals("Over")){
-                             System.out.println("lasaaaaa");
-                                try {
-                                    line=inStream.readLine();
-                                    System.out.println(line);
-                                } catch (Exception e) {
-                                     e.printStackTrace();
-                                }
-
-                            }
-                    }
-                }
-            ).start();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
+            f.init();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-    
-        
     }
     
 }
