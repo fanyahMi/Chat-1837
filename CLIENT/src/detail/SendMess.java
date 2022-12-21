@@ -4,18 +4,18 @@
  */
 package detail;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
 import client.CLIENT;
+import java.io.ObjectOutputStream;
 /**
  *
  * @author rakot
  */
 public class SendMess extends Thread{
-    DataOutputStream output;
+    ObjectOutputStream output;
 
-    public SendMess(DataOutputStream out) {
+    public SendMess(ObjectOutputStream out) {
         this.output = out;
     }
 
@@ -25,6 +25,7 @@ public class SendMess extends Thread{
         while (true) {
             try {
                 output.writeUTF(CLIENT.nom +": "+scan.next());
+                output.flush();
 
             } catch (IOException err) {
                 throw new RuntimeException(err);

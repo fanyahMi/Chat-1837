@@ -4,14 +4,14 @@
  */
 package server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import link.Client;
-import link.Message;
+import link.Operation;
 
 /**
  *
@@ -31,8 +31,9 @@ public class SERVER {
             while (true) {
 
                 sc = server.accept();
-                DataOutputStream out = new DataOutputStream(sc.getOutputStream());
-                DataInputStream in = new DataInputStream(sc.getInputStream());
+                ObjectOutputStream out = new ObjectOutputStream(sc.getOutputStream());
+                out.flush();
+                ObjectInputStream in = new ObjectInputStream(sc.getInputStream());
                 //System.out.print(in);
                 c = new Client();
                 c.setNom(in.readUTF());
@@ -40,7 +41,7 @@ public class SERVER {
                 c.setOut(out);
                 System.out.println("nouveau client ajouter");
                 
-                new Message(c);
+                new Operation(c);
                 allClient.add(c);
       
             }

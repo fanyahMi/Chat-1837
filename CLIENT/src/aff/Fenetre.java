@@ -4,10 +4,11 @@
  */
 package aff;
 
+import detail.MessageHandler;
 import detail.MessageUI;
 import java.awt.Color;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,7 +26,10 @@ import lisner.AjoutFile;
 public class Fenetre extends JFrame{
     JTextField text;
     public MessageUI messUI;
-    public Fenetre(DataOutputStream output,DataInputStream input,MessageUI messUI ){
+    public MessageHandler messageHandler = new MessageHandler();
+    
+    
+    public Fenetre(ObjectOutputStream output,ObjectInputStream input,MessageUI messUI ){
         JPanel Panel = new JPanel();
         text=new JTextField();
         this.messUI = messUI;
@@ -35,7 +39,10 @@ public class Fenetre extends JFrame{
         Border border = BorderFactory.createLineBorder(Color.BLACK);
         Lisner lisn=new Lisner(text, output, input);
         lisn.messageUI = this.messUI;
+        lisn.messageHandler = this.messageHandler;
         AjoutFile ajout= new AjoutFile();
+        ajout.messageHandler = this.messageHandler;
+        ajout.text = text;
         
         
         JButton envoie=new JButton("Envoyer");

@@ -8,11 +8,12 @@ package link;
  *
  * @author rakot
  */
+import detail.Message;
 import java.io.IOException;
 import server.SERVER;
-public class Message extends Thread{
+public class Operation extends Thread{
     Client c;
-    public Message(Client c) {
+    public Operation(Client c) {
         this.c = c;
         start();
     }
@@ -21,12 +22,12 @@ public class Message extends Thread{
     public void run() {
         while (true) {            
             try {
-                String mess = this.c.getIn().readUTF();
+                Message mess = (Message) this.c.getIn().readObject();
                 sendMessage(mess);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 SERVER.allClient.remove(c);
                 e.printStackTrace();
-            }
+            } 
         }
     }
     
@@ -34,6 +35,14 @@ public class Message extends Thread{
         for (Client client : SERVER.allClient) {
             if(!this.c.equals(client)){
                  client.getOut().writeUTF(mess);
+            }
+           
+        }
+    }
+    private void sendMessage(Message mess) throws IOException{
+        for (Client client : SERVER.allClient) {
+            if(!this.c.equals(client)){
+                 client.getOut().writeObject(mess);
             }
            
         }

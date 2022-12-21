@@ -4,10 +4,9 @@
  */
 package detail;
 
-import java.awt.List;
 import java.util.ArrayList;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import client.CLIENT;
 
 /**
  *
@@ -18,13 +17,30 @@ public class MessageUI {
     public JTextArea textArea = new JTextArea(50, 50);
      public MessageUI() {
         this.messages = new ArrayList<>();
-        
+        textArea.setEditable(false);
     }
 
     public void afficherMessUi(String message) {
         messages.add(message);
-        System.out.println("impiry");
+
         this.textArea.append(message + "\n");
+        
+    }
+    
+    public void afficherMessUi(Message message) {
+        //messages.add(message);
+        String nomag="";
+        if(!message.getUtilisateur().equals(CLIENT.nom)){
+            nomag= message.getUtilisateur()+": ";
+        }
+        
+        if(message.getType()!=Message.TEXT_TYPE){
+            this.textArea.append(nomag+message.getBody().toShow() + "\n");
+        }else{
+            this.textArea.append(nomag+message.getSimpleMessage() + "\n");
+        }
+        
+        
         
     }
 }

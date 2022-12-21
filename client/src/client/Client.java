@@ -8,12 +8,9 @@ import aff.Fenetre;
 import detail.MessageUI;
 import detail.ReceveMess;
 import detail.SendMess;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -32,15 +29,17 @@ public class CLIENT {
             nom = JOptionPane.showInputDialog(null, "Entrer votre nom");
             // TODO code application logic here
             Socket so = new Socket(ip, 5000);
-            DataOutputStream out = new DataOutputStream(so.getOutputStream());
-            DataInputStream input =new DataInputStream(so.getInputStream());
-            
+            ObjectOutputStream out = new ObjectOutputStream(so.getOutputStream());
+            out.flush();
+            System.out.println("out");
+           ObjectInputStream in = new ObjectInputStream(so.getInputStream());
+            System.out.println("in");
             out.writeUTF(nom);    
             SendMess mess = new SendMess(out);
             MessageUI messUI=new MessageUI();
-            new ReceveMess(input,messUI);
+            new ReceveMess(in,messUI);
             
-            Fenetre f = new Fenetre(out, input,messUI);
+            Fenetre f = new Fenetre(out, in,messUI);
             
             f.init();
         } catch (Exception ex) {

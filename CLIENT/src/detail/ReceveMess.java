@@ -4,16 +4,16 @@
  */
 package detail;
 
-import java.io.DataInputStream;
+import java.io.ObjectInputStream;
 
 /**
  *
  * @author rakot
  */
 public class ReceveMess extends Thread{
-DataInputStream input;
+ObjectInputStream input;
 MessageUI messageUI;
-    public ReceveMess(DataInputStream input,MessageUI messUI) {
+    public ReceveMess(ObjectInputStream input,MessageUI messUI) {
         this.input = input;
         this.messageUI = messUI;
         start();
@@ -22,11 +22,14 @@ MessageUI messageUI;
 
     @Override
     public void run(){
-        String message;
+        //String message;
+        Message message;
         while (true) {            
             try {
-                message=input.readUTF();
+                message = (Message) input.readObject();
+                /*message=input.readUTF();
                 System.out.print(message);
+                messageUI.afficherMessUi( message);*/
                 messageUI.afficherMessUi( message);
             } catch (Exception e) {
                 e.printStackTrace();

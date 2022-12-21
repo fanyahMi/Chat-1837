@@ -4,8 +4,8 @@
  */
 package link;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  *
@@ -21,23 +21,23 @@ public class Client {
         this.nom = nom;
     }
 
-    public DataOutputStream getOut() {
+    public ObjectOutputStream getOut() {
         return out;
     }
 
-    public void setOut(DataOutputStream out) {
+    public void setOut(ObjectOutputStream out) {
         this.out = out;
     }
 
-    public DataInputStream getIn() {
+    public ObjectInputStream getIn() {
         return in;
     }
 
-    public void setIn(DataInputStream in) {
+    public void setIn(ObjectInputStream in) {
         this.in = in;
     }
     String nom;
-    DataOutputStream out;
-    DataInputStream in;
+    ObjectOutputStream out;
+    ObjectInputStream in;
     
 }

@@ -5,14 +5,14 @@
 package lisner;
 
 import client.CLIENT;
+import detail.Message;
+import detail.MessageHandler;
 import detail.MessageUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javax.swing.JTextField;
 
 /**
@@ -21,24 +21,36 @@ import javax.swing.JTextField;
  */
 public class Lisner implements ActionListener{
 
-    public Lisner(JTextField text, DataOutputStream output, DataInputStream input) {
+    public MessageHandler messageHandler;
+    public Lisner(JTextField text, ObjectOutputStream output, ObjectInputStream input) {
         this.text = text;
         this.output = output;
         this.input = input;
     }
    public  MessageUI messageUI;
     JTextField text;
-    DataOutputStream output;
-    DataInputStream input;
+    ObjectOutputStream output;
+    ObjectInputStream input;
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String message=text.getText();
+        //String message=text.getText();
+         
         try {
-            output.writeUTF(CLIENT.nom +": "+message+"\n");
+            if(messageHandler.getMessage()==null || messageHandler.getMessage().getType()!= Message.FILE_TYPE){
+             messageHandler.setMessage(new Message());
+             messageHandler.getMessage().initText(text.getText());
+            }
+            messageHandler.getMessage().setUtilisateur(CLIENT.nom );
+            output.writeObject(messageHandler.getMessage());
             output.flush();
             text.setText("");
-            messageUI.afficherMessUi( message);
+            
+            /*output.writeUTF(CLIENT.nom +": "+message+"\n");
+            output.flush();
+            text.setText("");*/
+            messageUI.afficherMessUi( messageHandler.getMessage());
+            messageHandler.setMessage(null);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
