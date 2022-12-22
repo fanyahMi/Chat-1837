@@ -7,6 +7,7 @@ package aff;
 import detail.MessageHandler;
 import detail.MessageUI;
 import java.awt.Color;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javax.swing.BorderFactory;
@@ -74,7 +75,7 @@ public class Fenetre extends JFrame{
 
     public void init() {
         this.setLayout(null);
-        this.setSize(1000, 1000);
+        this.setSize(900, 900);
         this.setVisible(true);
     }
 }

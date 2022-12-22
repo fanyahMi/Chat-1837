@@ -42,6 +42,8 @@ public class Lisner implements ActionListener{
              messageHandler.getMessage().initText(text.getText());
             }
             messageHandler.getMessage().setUtilisateur(CLIENT.nom );
+            
+            System.out.println("ghgajdag     "+messageHandler.getMessage());
             output.writeObject(messageHandler.getMessage());
             output.flush();
             text.setText("");

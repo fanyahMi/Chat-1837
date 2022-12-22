@@ -9,6 +9,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Base64;
 
 /**
@@ -33,9 +36,24 @@ public class FileMessageFormat implements MessageInterface, Serializable{
         temp.data = dataFileString;
         
         return temp;
-    }    
-     public static String encodeFile(byte[] dataByteArray) {
+    }  
+    
+    public static void getFile(FileMessageFormat mess) throws IOException{
+        
+        byte[] dataByte = FileMessageFormat.decodeFile( mess.data);
+        
+        Path path = Paths.get("D:\\"+mess.fileName);
+        Files.write(path, dataByte);
+        
+        System.out.println("file"
+                + "");
+    }
+    
+    public static String encodeFile(byte[] dataByteArray) {
         return Base64.getEncoder().encodeToString(dataByteArray);
+    }
+    public static byte[] decodeFile(String str) {
+        return Base64.getDecoder().decode(str);
     }
      public String toShow(){
          return this.fileName;

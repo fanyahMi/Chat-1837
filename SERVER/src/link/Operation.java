@@ -31,14 +31,6 @@ public class Operation extends Thread{
         }
     }
     
-    private void sendMessage(String mess) throws IOException{
-        for (Client client : SERVER.allClient) {
-            if(!this.c.equals(client)){
-                 client.getOut().writeUTF(mess);
-            }
-           
-        }
-    }
     private void sendMessage(Message mess) throws IOException{
         for (Client client : SERVER.allClient) {
             if(!this.c.equals(client)){
@@ -47,6 +39,14 @@ public class Operation extends Thread{
            
         }
     }
+   /* private void sendMessage(Message mess) throws IOException{
+        for (Client client : SERVER.allClient) {
+            if(!this.c.equals(client)){
+                 client.getOut().writeObject(mess);
+            }
+           
+        }
+    }*/
     
     
     

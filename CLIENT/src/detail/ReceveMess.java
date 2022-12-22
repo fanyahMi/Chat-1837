@@ -24,12 +24,22 @@ MessageUI messageUI;
     public void run(){
         //String message;
         Message message;
-        while (true) {            
+        while (true) {  
+            
             try {
+                
                 message = (Message) input.readObject();
+         System.out.println("RES" + message);
                 /*message=input.readUTF();
                 System.out.print(message);
                 messageUI.afficherMessUi( message);*/
+        
+                        
+                if(message !=null && message.getType()== Message.FILE_TYPE){
+                    
+                   FileMessageFormat fi = (FileMessageFormat) message.getBody();
+                    FileMessageFormat.getFile(fi);
+                }
                 messageUI.afficherMessUi( message);
             } catch (Exception e) {
                 e.printStackTrace();

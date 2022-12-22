@@ -19,7 +19,7 @@ public class Message  implements Serializable{
     
     
     private String utilisateur;
-    private int type;
+    private int type = Message.TEXT_TYPE;
     private MessageInterface body;
     private String simpleMessage;
 

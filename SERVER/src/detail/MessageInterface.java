@@ -8,7 +8,7 @@ package detail;
  *
  * @author rakot
  */
-public interface MessageInterface {
+public interface MessageInterface  {
     
     public String toShow();
 }

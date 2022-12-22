@@ -12,14 +12,14 @@ import java.io.Serializable;
  *
  * @author rakot
  */
-public class Message implements Serializable {
+public class Message  implements Serializable{
     
     public static int FILE_TYPE = 0;
     public static int TEXT_TYPE = 1;
     
     
     private String utilisateur;
-    private int type;
+    private int type = Message.TEXT_TYPE;
     private MessageInterface body;
     private String simpleMessage;
 

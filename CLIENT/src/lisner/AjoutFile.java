@@ -34,7 +34,7 @@ public class AjoutFile implements ActionListener{
                 ex.printStackTrace();
             }
         }
-
+        System.out.println("messaaaage" + messageHandler.getMessage());
     }
 
 }
