@@ -38,9 +38,7 @@ public class MessageUI {
             this.textArea.append(nomag+message.getBody().toShow() + "\n");
         }else{
             this.textArea.append(nomag+message.getSimpleMessage() + "\n");
-        }
-        
-        
-        
+        }     
+               
     }
 }

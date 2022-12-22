@@ -30,7 +30,7 @@ public class Fenetre extends JFrame{
     public MessageHandler messageHandler = new MessageHandler();
     
     
-    public Fenetre(ObjectOutputStream output,ObjectInputStream input,MessageUI messUI ){
+    public Fenetre(ObjectOutputStream output,ObjectInputStream input,MessageUI messUI ) throws IOException{
         JPanel Panel = new JPanel();
         text=new JTextField();
         this.messUI = messUI;
@@ -39,6 +39,7 @@ public class Fenetre extends JFrame{
         
         Border border = BorderFactory.createLineBorder(Color.BLACK);
         Lisner lisn=new Lisner(text, output, input);
+        output.flush();
         lisn.messageUI = this.messUI;
         lisn.messageHandler = this.messageHandler;
         AjoutFile ajout= new AjoutFile();

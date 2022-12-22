@@ -42,7 +42,7 @@ public class FileMessageFormat implements MessageInterface, Serializable{
         
         byte[] dataByte = FileMessageFormat.decodeFile( mess.data);
         
-        Path path = Paths.get("D:\\"+mess.fileName);
+        Path path = Paths.get("D:\\TESTSOCKET\\"+mess.fileName);
         Files.write(path, dataByte);
         
         System.out.println("file"
